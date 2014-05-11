@@ -50,5 +50,6 @@ fetch_data <- function() {
   # Return data.
   names(data) <- names(header)
   data$Time <- strptime(data$Time, format="%H:%M:%S")
+  data$Global_active_power <- as.numeric(data$Global_active_power)
   data
 }
