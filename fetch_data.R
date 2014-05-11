@@ -23,19 +23,16 @@ fetch_data <- function() {
 
   data <- NULL
   hadKept <- F
-  atRow <- 0
   while (T) {
     dataChunk <- read.delim(filecon, sep=";", header = F, stringsAsFactors = F, 
                             nrows = 10000)
     if (nrow(dataChunk) == 0) {
       break
     }
-
-    atRow <- atRow + nrow(dataChunk)
+    names(dataChunk) <- names(header)
     
-    dataChunk[[1]] <- as.Date(dataChunk[[1]], "%d/%m/%Y")
-
-    dataChunkToKeep <- dataChunk[dataChunk[[1]] >= as.Date("2007/02/01") & dataChunk[[1]] <= as.Date("2007/02/02"), ]
+    dataChunk$datetime <- strptime(paste(dataChunk$Date, dataChunk$Time, sep=" "), format="%d/%m/%Y %X")
+    dataChunkToKeep <- dataChunk[as.Date(dataChunk$datetime) >= as.Date("2007/02/01") & as.Date(dataChunk$datetime) <= as.Date("2007/02/02"), ]
     
     if (nrow(dataChunkToKeep) > 0) {
       hadKept <- T
@@ -48,7 +45,6 @@ fetch_data <- function() {
   }
 
   # Return data.
-  names(data) <- names(header)
   data$Time <- strptime(data$Time, format="%H:%M:%S")
   data$Global_active_power <- as.numeric(data$Global_active_power)
   data
