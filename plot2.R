@@ -9,8 +9,8 @@ png(
   units     = "px",
 )
 
-plot(d$datetime, 
-     d$Global_active_power, 
+plot(data$datetime, 
+     data$Global_active_power, 
      type="l", 
      lty=1, 
      xlab="", 
